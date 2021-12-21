@@ -6,7 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:17:12 by graja             #+#    #+#             */
-/*   Updated: 2021/12/20 17:22:24 by graja            ###   ########.fr       */
+/*   Updated: 2021/12/21 10:17:42 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,19 @@ int	get_next_step(int argc, char **argv, int start)
 {
 	while (start < argc)
 	{
-		if (!strncmp(argv[start], "|\0", 2))
+		if (!strncmp(argv[start], ";\0", 2))
 		{
 			argv[start] = NULL;
 			return (start);
 		}
-		else if (!strncmp(argv[start], ";\0", 2))
+		else if (!strncmp(argv[start], "|\0", 2))
 		{
 			argv[start] = NULL;
 			return (start * -1);
 		}
 		start++;
 	}
-	return (argc - 1);
+	return (argc);
 }
 
 static
@@ -88,13 +88,30 @@ int	run_command(char **argv, int start, int stp, char **env)
 {
 	pid_t	pid;
 	int	status;
-	static	int	piped = 0;
-	
+	int	pipefd[2];
+	static	int	readpipe = -1;
+
+	printf("HERE %d = %d\n", start, stp);
 	if (start == stp)
 		return (stp);
+	if (stp < 0)
+	{
+		if (pipe(pipefd) == -1)
+			print_error("error: fatal\n", -1);
+	}
 	pid = fork();
 	if (!pid)
 	{
+		if (stp < 0)
+		{
+			if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+				print_error("error: fatal\n", -1);
+		}	
+		if (readpipe != -1)
+		{
+			if (dup2(readpipe, STDIN_FILENO) == -1)
+				print_error("error: fatal\n", -1);
+		}
 		if (execve(argv[start], &argv[start], env) < 0)
 		{
 			print_error("error: cannot execute ", 0);
@@ -102,7 +119,24 @@ int	run_command(char **argv, int start, int stp, char **env)
 		}
 		exit (0);
 	}
-	waitpid(pid, &status, 0);
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (readpipe != -1)
+			close(readpipe);
+		if (stp < 0)
+		{
+			readpipe = pipefd[0];
+			close(pipefd[1]);
+		}
+		else
+		{
+			stp *= -1;
+			readpipe = -1;
+		}
+	}
+	if (stp < 0)
+		stp *= -1;
 	return (stp);
 }
 
@@ -133,7 +167,7 @@ int	main(int argc, char **argv)
 	fin = 0;
 	if (argc == 1)
 		return (0);
-	while (start < argc && argv[start])
+	while (start < argc)
 	{
 		fin = get_next_step(argc, argv, start);
 		debug(argv, start, fin);
