@@ -6,7 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:17:12 by graja             #+#    #+#             */
-/*   Updated: 2021/12/21 10:17:42 by graja            ###   ########.fr       */
+/*   Updated: 2021/12/21 10:28:23 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	builtin_cd(char **argv, int start, int fin)
 	}
 	if (chdir(argv[start + 1]) < 0)
 	{
-		print_error("error: cannot change directory ", 0);
+		print_error("error: cannot change directory to ", 0);
 		print_error(argv[start + 1], 1);
 	}
 	return (fin);
