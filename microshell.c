@@ -6,11 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:17:12 by graja             #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/12/21 10:39:02 by graja            ###   ########.fr       */
-=======
-/*   Updated: 2021/12/22 09:00:51 by graja            ###   ########.fr       */
->>>>>>> debug
+/*   Updated: 2021/12/22 10:23:20 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,26 +142,6 @@ int	run_command(char **argv, int start, int stp, char **env)
 	return (stp);
 }
 
-<<<<<<< HEAD
-=======
-static
-void	debug(char **argv, int start, int fin)
-{
-	static int	i = 1;
-
-	if (fin < 0)
-		fin *= -1;
-	printf("%3d) ", i);
-	while (argv[start] && start < fin)
-	{
-		printf("%s ", argv[start]);
-		start++;
-	}
-	printf("\n");
-	i++;
-}
-
->>>>>>> debug
 int	main(int argc, char **argv)
 {
 	int				start;
@@ -179,16 +155,11 @@ int	main(int argc, char **argv)
 	while (start < argc)
 	{
 		fin = get_next_step(argc, argv, start);
-<<<<<<< HEAD
-=======
-		//printf("%d - %d\n", start, fin);
 		if (start == fin || start == fin * -1)
 		{
 			start++;
 			continue ;
 		}
-		//debug(argv, start, fin);
->>>>>>> debug
 		if (!strncmp(argv[start], "cd\0", 3))
 			fin = builtin_cd(argv, start, fin);
 		else
