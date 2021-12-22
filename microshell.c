@@ -6,7 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:17:12 by graja             #+#    #+#             */
-/*   Updated: 2021/12/21 10:28:23 by graja            ###   ########.fr       */
+/*   Updated: 2021/12/22 09:00:51 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void	print_error(char *str, int flag)
 	if (flag > 0)
 		write(2, "\n", 1);
 	else if (flag < 0)
+	{
+		write(2, "\n", 1);
 		exit(errno);
+	}
 }
 
 static
@@ -91,7 +94,6 @@ int	run_command(char **argv, int start, int stp, char **env)
 	int	pipefd[2];
 	static	int	readpipe = -1;
 
-	printf("HERE %d = %d\n", start, stp);
 	if (start == stp)
 		return (stp);
 	if (stp < 0)
@@ -148,7 +150,7 @@ void	debug(char **argv, int start, int fin)
 	if (fin < 0)
 		fin *= -1;
 	printf("%3d) ", i);
-	while (start < fin)
+	while (argv[start] && start < fin)
 	{
 		printf("%s ", argv[start]);
 		start++;
@@ -170,7 +172,13 @@ int	main(int argc, char **argv)
 	while (start < argc)
 	{
 		fin = get_next_step(argc, argv, start);
-		debug(argv, start, fin);
+		//printf("%d - %d\n", start, fin);
+		if (start == fin || start == fin * -1)
+		{
+			start++;
+			continue ;
+		}
+		//debug(argv, start, fin);
 		if (!strncmp(argv[start], "cd\0", 3))
 			fin = builtin_cd(argv, start, fin);
 		else
