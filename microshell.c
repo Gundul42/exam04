@@ -6,7 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:17:12 by graja             #+#    #+#             */
-/*   Updated: 2021/12/23 08:25:18 by graja            ###   ########.fr       */
+/*   Updated: 2021/12/23 08:50:23 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,6 @@ int	run_command(char **argv, int start, int stp, char **env)
 		}
 		else
 		{
-			if (readpipe != -1)
-				close (readpipe);
 			stp *= -1;
 			readpipe = -1;
 		}
