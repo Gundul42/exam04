@@ -6,17 +6,15 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:17:12 by graja             #+#    #+#             */
-/*   Updated: 2021/12/22 10:23:20 by graja            ###   ########.fr       */
+/*   Updated: 2021/12/23 08:25:18 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <stdio.h>
 #include <errno.h>
 
 static
@@ -133,6 +131,8 @@ int	run_command(char **argv, int start, int stp, char **env)
 		}
 		else
 		{
+			if (readpipe != -1)
+				close (readpipe);
 			stp *= -1;
 			readpipe = -1;
 		}
